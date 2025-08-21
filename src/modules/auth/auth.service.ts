@@ -1,5 +1,4 @@
 import { EmailForgotPasswordDto } from './../email/dto/email-forgot-password.dto';
-import { config } from 'dotenv';
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import Redis from 'ioredis';
 import { BadRequestException, Injectable } from '@nestjs/common';
@@ -108,7 +107,8 @@ export class AuthService {
         if (!isPasswordMatch) {
             throw new BadRequestException(ERROR_MESSAGES.WRONG_USERNAME_OR_PASSWORD);
         }
-        return await this.generateCredentials(user);
+        const credentials = await this.generateCredentials(user);
+        return {...credentials,User: user};
     }
 
     async getMe(userId: number) {
