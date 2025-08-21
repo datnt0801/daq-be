@@ -4,4 +4,5 @@ export const ERROR_MESSAGES = {
     USER_NOT_FOUND: 'User not found',
     UNAUTHORIZED: 'Unauthorized',
     INVALID_TOKEN: 'Invalid token',
+    INVALID_CREDENTIALS: 'Invalid credentials',
 }

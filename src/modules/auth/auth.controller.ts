@@ -11,11 +11,14 @@ import { SendMailDto } from './dto/send-mail-dto';
 import { UseGuards } from '@nestjs/common';
 import { JwtAuthGuard } from 'src/modules/auth/jwt/jwt.guard';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
-import { VerifyEmailDto } from 'src/modules/email/dto/send-verify-email.dto';
 import { VerifyEmailTokenDto } from 'src/modules/auth/dto/verify-email-token.dto';
 import { ForgotPasswordDto } from 'src/modules/auth/dto/forgot-password.dto';
 import { VerifyForgotPasswordDto } from 'src/modules/auth/dto/verify-forgot-password.dto';
-
+import { RoleGuard } from 'src/shared/guards/role.guards';
+import { UserType } from 'src/constants/enum.constant';
+import { AllowedRoles } from 'src/shared/guards/role.guards';
+import { ApiTags } from '@nestjs/swagger';
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
     constructor(private readonly authService: AuthService) {}
@@ -40,7 +43,8 @@ export class AuthController {
     }
 
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @AllowedRoles(UserType.ADMIN)
     @Get('/get-me')
     @ApiOperation({
         summary: 'Get me',
@@ -51,7 +55,8 @@ export class AuthController {
     }
 
     @ApiBearerAuth()
-    @UseGuards(JwtAuthGuard)
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @AllowedRoles(UserType.ADMIN)
     @Post('/send-email')
     @ApiOperation({
         summary: 'Send email',

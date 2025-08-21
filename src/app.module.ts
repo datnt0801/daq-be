@@ -11,7 +11,6 @@ import { PassportModule } from '@nestjs/passport';
 import { BullModule } from '@nestjs/bullmq';
 import { queueRedisOptions } from 'src/configs/queue.config';
 import { EmailModule } from 'src/modules/email/email.module';
-
 @Module({
   imports: [
     ConfigModule.forRoot({
