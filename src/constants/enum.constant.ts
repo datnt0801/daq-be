@@ -10,4 +10,9 @@ export enum UserStatus {
     PENDING = 'Pending',
     ACTIVE = 'Active',
     BLOCKED = 'Blocked',
-  }
+}
+
+export enum TableStatus {
+    AVAILABLE = 'Available',
+    UNAVAILABLE = 'Unavailable',
+}

@@ -1,0 +1,5 @@
+{
+    "terminal.integrated.suggest.enabled": true,
+    "terminal.integrated.suggest.inlineSuggestion": "alwaysOnTopExceptExactMatch",
+    "terminal.integrated.suggest.runOnEnter": "always"
+}
