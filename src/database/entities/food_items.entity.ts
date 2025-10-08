@@ -1,12 +1,12 @@
 import {Entity, Column, PrimaryGeneratedColumn} from 'typeorm';
+import { BaseEntity } from 'src/database/entities/base.entity';
+
 
 @Entity({
     name: 'food_items',
 })
-export class FoodItem {
-    @PrimaryGeneratedColumn()
-    id: number;
-
+export class FoodItem extends BaseEntity {
+    
     @Column({
         name: 'name',
         unique: true,

@@ -32,5 +32,5 @@ export class StaffDto {
     @IsNotEmpty()
     @IsString()
     @IsEnum(UserType)
-    role: UserType;
+    userType: UserType;
 }

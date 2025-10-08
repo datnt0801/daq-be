@@ -44,7 +44,7 @@ export class AuthController {
 
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard, RoleGuard)
-    @AllowedRoles(UserType.ADMIN)
+    @AllowedRoles(UserType.ADMIN, UserType.STAFF, UserType.USER, UserType.GUEST)
     @Get('/get-me')
     @ApiOperation({
         summary: 'Get me',
@@ -56,16 +56,14 @@ export class AuthController {
 
     @ApiBearerAuth()
     @UseGuards(JwtAuthGuard, RoleGuard)
-    @AllowedRoles(UserType.ADMIN)
+    @AllowedRoles(UserType.ADMIN, UserType.USER)
     @Post('/send-email')
     @ApiOperation({
         summary: 'Send email',
         description: 'Send email',
     })
-    async sendEmail(@Body() sendMailDto: SendMailDto) {
-        console.log('[AuthController] Starting sendEmail with data:', sendMailDto);
+    async sendEmail(@Body() sendMailDto: SendMailDto) {      
         const result = await this.authService.sendEmail(sendMailDto);
-        console.log('[AuthController] Email sent successfully');
         return result;
     }
 
