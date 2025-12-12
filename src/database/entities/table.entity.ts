@@ -16,4 +16,9 @@ export class TableEntity extends BaseEntity {
         name: 'status',
     })
     status: TableStatus;
+
+    @Column({
+        name: 'capacity',
+    })
+    capacity: number;
 }

@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsNotEmpty, IsEnum } from "class-validator";
+import { IsNotEmpty, IsEnum, IsNumber } from "class-validator";
 import { TableStatus } from "src/constants/enum.constant";
 
 export class TableDto {
@@ -19,5 +19,13 @@ export class TableDto {
     @IsNotEmpty()
     @IsEnum(TableStatus)
     status: TableStatus;
+
+    @ApiProperty({
+        example: 6,
+        description: 'Table capacity',
+    })
+    @IsNotEmpty()
+    @IsNumber()
+    capacity: number;
     
 }
