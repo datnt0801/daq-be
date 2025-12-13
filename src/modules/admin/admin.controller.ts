@@ -9,6 +9,8 @@ import { AllowedRoles } from "src/shared/guards/role.guards";
 import { StaffDto } from "src/modules/admin/dto/staff.dto";
 import { GetStaffsPaginationDto } from "src/modules/admin/dto/get-staffs-pagination.dto";
 import { GetTablesPaginationDto } from "src/modules/admin/dto/get-tables-pagination.dto";
+import { FoodItemDto } from "src/modules/admin/dto/food-item.dto";
+import { GetFoodItemsPaginationDto } from "src/modules/admin/dto/get-food-items-pagination.dto";
 
 @ApiTags('Admin')
 @Controller('admin')
@@ -103,5 +105,50 @@ export class AdminController {
     @ApiOperation({ summary: 'Delete staff' })
     async deleteStaff(@Param('id') id: number) {
         return this.adminService.deleteStaff(id);
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @AllowedRoles(UserType.ADMIN)
+    @Post('food-item')
+    @ApiOperation({ summary: 'Create food item' })
+    async createFoodItem(@Body() foodItemDto: FoodItemDto) {
+        return this.adminService.createFoodItem(foodItemDto);
+    }
+
+    // @ApiBearerAuth()
+    // @UseGuards(JwtAuthGuard, RoleGuard)
+    // @AllowedRoles(UserType.ADMIN)
+    @Get('food-item')
+    @ApiOperation({ summary: 'Get food items' })
+    async getFoodItems(@Query() getFoodItemsPaginationDto: GetFoodItemsPaginationDto) {
+        return this.adminService.getFoodItems(getFoodItemsPaginationDto);
+    }
+
+    // @ApiBearerAuth()
+    // @UseGuards(JwtAuthGuard, RoleGuard)
+    // @AllowedRoles(UserType.ADMIN)
+    @Get('food-item/:id')
+    @ApiOperation({ summary: 'Get food item' })
+    async getFoodItem(@Param('id') id: number) {
+        return this.adminService.getFoodItem(id);
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @AllowedRoles(UserType.ADMIN)
+    @Put('food-item/:id')
+    @ApiOperation({ summary: 'Update food item' })
+    async updateFoodItem(@Param('id') id: number, @Body() foodItemDto: FoodItemDto) {
+        return this.adminService.updateFoodItem(id, foodItemDto);
+    }
+
+    @ApiBearerAuth()
+    @UseGuards(JwtAuthGuard, RoleGuard)
+    @AllowedRoles(UserType.ADMIN)
+    @Delete('food-item/:id')
+    @ApiOperation({ summary: 'Delete food item' })
+    async deleteFoodItem(@Param('id') id: number) {
+        return this.adminService.deleteFoodItem(id);
     }
 }

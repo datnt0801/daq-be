@@ -21,4 +21,9 @@ export class TableEntity extends BaseEntity {
         name: 'capacity',
     })
     capacity: number;
+
+    @Column({
+        name: 'floor',
+    })
+    floor: number;
 }

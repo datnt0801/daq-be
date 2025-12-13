@@ -1,5 +1,5 @@
 import { ApiProperty } from "@nestjs/swagger";
-import { IsEnum, IsNotEmpty, IsString } from "class-validator";
+import { IsEnum, IsNotEmpty, IsOptional, IsString } from "class-validator";
 import { UserType } from "src/constants/enum.constant";
 
 export class StaffDto {
@@ -11,6 +11,7 @@ export class StaffDto {
     )
     @IsNotEmpty()
     @IsString()
+    @IsOptional()
     name: string;
 
     @ApiProperty(
@@ -21,6 +22,7 @@ export class StaffDto {
     )
     @IsNotEmpty()
     @IsString()
+    @IsOptional()
     email: string;
 
     @ApiProperty(
@@ -32,5 +34,6 @@ export class StaffDto {
     @IsNotEmpty()
     @IsString()
     @IsEnum(UserType)
+    @IsOptional()
     userType: UserType;
 }

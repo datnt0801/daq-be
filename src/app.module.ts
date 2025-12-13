@@ -12,6 +12,9 @@ import { BullModule } from '@nestjs/bullmq';
 import { queueRedisOptions } from 'src/configs/queue.config';
 import { EmailModule } from 'src/modules/email/email.module';
 import { AdminModule } from './modules/admin/admin.module';
+import { UserModule } from './modules/user/user.module';
+import { MenuModule } from './modules/menu/menu.module';
+import { PaymentModule } from './modules/payment/payment.module';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -35,7 +38,10 @@ import { AdminModule } from './modules/admin/admin.module';
     }),
     AuthModule,
     AdminModule,
+    UserModule,
     EmailModule,
+    MenuModule,
+    PaymentModule,
   ],
   controllers: [],
   providers: [JwtStrategy],
