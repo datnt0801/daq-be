@@ -1,7 +1,7 @@
 import { EmailForgotPasswordDto } from './../email/dto/email-forgot-password.dto';
 import { RedisService } from '@liaoliaots/nestjs-redis';
 import Redis from 'ioredis';
-import { BadRequestException, Injectable } from '@nestjs/common';
+import { BadRequestException, ConflictException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { SignUpDto } from './dto/sign-up.dto';
 import { UserRepository } from 'src/database/repositories/users.repository';
 import { SignInDto } from 'src/modules/auth/dto/sign-in.dto';
@@ -74,7 +74,7 @@ export class AuthService {
           });
       
           if (checkUserExist) {
-            throw new BadRequestException(ERROR_MESSAGES.USER_ALREADY_EXISTS);
+            throw new ConflictException(ERROR_MESSAGES.USER_ALREADY_EXISTS);
           }
       
           const hashPassword = bcrypt.hashSync(signUpDto.password, 10);
@@ -91,7 +91,13 @@ export class AuthService {
 
           delete (newUser as any).hashPassword;
 
-          return newUser;  
+          const payload: JwtPayload = { userId: newUser.id, userType: newUser.userType };
+
+          const data = await this.sendVerificationEmail(payload);
+
+          const signInData = await this.signIn({email: newUser.email, password: signUpDto.password});
+
+          return {signInData, data};  
     }
 
     async signIn(signInDto: SignInDto) {
@@ -101,14 +107,14 @@ export class AuthService {
             },
           });
         if (!user) {
-            throw new BadRequestException(ERROR_MESSAGES.USER_NOT_FOUND);
+            throw new UnauthorizedException(ERROR_MESSAGES.USER_NOT_FOUND);
         }
         const isPasswordMatch = bcrypt.compareSync(signInDto.password, user.hashPassword);
         if (!isPasswordMatch) {
-            throw new BadRequestException(ERROR_MESSAGES.WRONG_USERNAME_OR_PASSWORD);
+            throw new UnauthorizedException(ERROR_MESSAGES.WRONG_USERNAME_OR_PASSWORD);
         }
         const credentials = await this.generateCredentials(user);
-        return {...credentials,User: user};
+        return {...credentials,user};
     }
 
     async getMe(userId: number) {
@@ -152,9 +158,11 @@ export class AuthService {
 
 
     async signOut(userId: number, accessToken: string) {
+        console.log('[AuthService] Starting signOut with data:', userId, accessToken);
         const refreshAccessToken = createHash('sha256').update(accessToken).digest('hex');
         await this.redisClient.del(`REFRESH_TOKEN_PREFIX_${refreshAccessToken}`);
         await this.redisClient.del(`USER_ID_LOGIN_PREFIX_${userId}_${refreshAccessToken}`);
+        console.log('[AuthService] Sign out completed successfully');
         return {message: 'Sign out successfully'};
     }
 
@@ -200,14 +208,15 @@ export class AuthService {
         await this.redisClient.set(`USER_ID_VERIFY_TOKEN_PREFIX_${user.id}`, verifyToken, 'EX', Number(this.configService.get('EMAIL_VERIFY_TOKEN_EXPIRATION_TIME')));
         const verifyEmailDto: VerifyEmailDto = {
             to: user.email,
-            emailSubject: 'Verify your email',
+            emailSubject: 'Mã Xác Nhận Email DAQ',
             verifyEmailUrl: `${this.configService.get('EMAIL_FRONTEND_VERIFY_URL')}?verify-token=${verifyToken}`,
+            verifyToken,
         };
         const result = await this.emailService.sendEmailVerify(verifyEmailDto);
         if (!result) {
-          return {message: 'Verification email sent failed'};
+          return {message: 'Verification email sent failed', verifyToken};
         }
-        return {message: 'Verification email sent successfully'};
+        return {message: 'Verification email sent successfully', verifyToken};
     }
 
     async verifyEmail(verifyTokenDto: VerifyEmailTokenDto) {

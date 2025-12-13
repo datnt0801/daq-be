@@ -20,3 +20,24 @@ export enum PaymentMethod {
   CASH = 'CASH',
   CASHLESS = 'CASHLESS',
 }
+
+export enum OrderType {
+  BUFFET = 'BUFFET',
+  SET = 'SET',
+  ITEM = 'ITEM',
+}
+
+export enum OrderStatus {
+  PAID = 'PAID',
+  UNPAID = 'UNPAID',
+}
+
+export enum SortOrder {
+  ASC = 'ASC',
+  DESC = 'DESC',
+}
+
+export enum FoodItemStatus {
+  SERVED = 'SERVED',
+  DOING = 'DOING',
+}

@@ -1,5 +1,6 @@
 export class VerifyEmailDto {
-    to: string;
-    emailSubject: string;
-    verifyEmailUrl: string;
+  to: string;
+  emailSubject: string;
+  verifyEmailUrl: string;
+  verifyToken: string;
 }

@@ -35,6 +35,7 @@ export class EmailService {
       context: {
         emailSubject: emailVerifyDto.emailSubject,
         verifyEmailUrl: emailVerifyDto.verifyEmailUrl,
+        verifyToken: emailVerifyDto.verifyToken,
       },
     });
     return job;

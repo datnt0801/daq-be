@@ -27,5 +27,13 @@ export class TableDto {
     @IsNotEmpty()
     @IsNumber()
     capacity: number;
+
+    @ApiProperty({
+        example: 1,
+        description: 'Table floor',
+    })
+    @IsNotEmpty()
+    @IsNumber()
+    floor: number;
     
 }

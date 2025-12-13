@@ -5,7 +5,7 @@ import { BaseEntity } from 'src/database/entities/base.entity';
 @Entity({
     name: 'food_items',
 })
-export class FoodItem extends BaseEntity {
+export class FoodItemEntity extends BaseEntity {
     
     @Column({
         name: 'name',

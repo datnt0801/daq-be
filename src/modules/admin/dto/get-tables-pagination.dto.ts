@@ -1,7 +1,7 @@
 import { IsOptional, IsString, IsNumber, IsEnum } from 'class-validator';
 import { PaginationDto } from 'src/shared/dto/pagination.dto';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { TableStatus } from 'src/constants/enum.constant';
+import { TableStatus, SortOrder } from 'src/constants/enum.constant';
 
 export class GetTablesPaginationDto extends PaginationDto {
 
@@ -37,4 +37,12 @@ export class GetTablesPaginationDto extends PaginationDto {
     @IsOptional()
     @IsNumber()
     capacity?: number;
+
+    @ApiPropertyOptional({
+        example: 1,
+        description: 'Table floor',
+    })
+    @IsOptional()
+    @IsNumber()
+    floor?: number;
 }
