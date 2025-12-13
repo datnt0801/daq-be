@@ -4,7 +4,6 @@ import { OrderStatus, OrderType } from 'src/constants/enum.constant';
 import { PaymentDto } from 'src/modules/payment/dto/payment.dto';
 import { BuffetRepository } from 'src/database/repositories/buffet.repository';
 import { SetRepository } from 'src/database/repositories/set.repository';
-import { OrderEntity } from 'src/database/entities/orders.entity';
 
 @Injectable()
 export class PaymentService {
