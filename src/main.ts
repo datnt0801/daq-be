@@ -17,6 +17,10 @@ async function bootstrap() {
         return callback(null, true);
       }
 
+      if (/\.vercel\.app$/.test(origin)) {
+        return callback(null, true);
+      }
+
       const whitelist = ['http://localhost:5173', 'http://localhost:8000'];
 
       if (whitelist.includes(origin)) {

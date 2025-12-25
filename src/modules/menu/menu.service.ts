@@ -16,8 +16,7 @@ import { JwtPayload } from 'src/modules/auth/jwt/jwt.guard';
 import { FoodItemStatus, OrderStatus, UserType } from 'src/constants/enum.constant';
 import { CreateOrderDetailDto } from 'src/modules/menu/dto/order-dto copy';
 import { OrderDetailRepository } from 'src/database/repositories/order-details.repository';
-import { async } from 'rxjs';
-
+import { OrderType } from 'src/constants/enum.constant';
 @Injectable()
 export class MenuService {
     constructor(
@@ -299,5 +298,30 @@ export class MenuService {
   async checkPayment(id: number) {
     const order = await this.orderRepository.findOne({ where: { id } });
     return { confirmed: order?.status === OrderStatus.PAID}
+  }
+
+  async statistics() {
+    const orders = await this.orderRepository.find();
+    const paidOrders = orders.filter(order => order.status === OrderStatus.PAID);
+    const sets = await this.setRepository.find();
+    const buffets = await this.buffetRepository.find();
+    const totalRevenue = orders.reduce((totalRevenue, order) =>{
+      return totalRevenue + (order.type === OrderType.BUFFET 
+        ? (buffets.find(item => item.id === order.type_id)?.price!*order.total || 0)
+        :(sets.find(item => item.id === order.type_id)?.price!*order.total || 0));
+    }, 0);
+    const totalProfit = paidOrders.reduce((totalProfit, order) =>{
+      return totalProfit + (order.type === OrderType.BUFFET 
+        ? (buffets.find(item => item.id === order.type_id)?.price!*order.total || 0)
+        :(sets.find(item => item.id === order.type_id)?.price!*order.total || 0));
+    }, 0);
+    const ordersWithPrice = orders.map(order => {
+      return {
+        ...order,
+        price: order.type === OrderType.BUFFET 
+        ? (buffets.find(item => item.id === order.type_id)?.price!*order.total || 0)
+        :(sets.find(item => item.id === order.type_id)?.price!*order.total || 0)
+      }});
+    return {orders: ordersWithPrice, paidOrders, totalRevenue, totalProfit};
   }
 }

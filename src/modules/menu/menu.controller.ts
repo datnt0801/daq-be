@@ -268,4 +268,12 @@ export class MenuController {
   checkPayment(@Param('id') id: number) {
     return this.menuService.checkPayment(id);
   }
+
+  @ApiBearerAuth()
+  @UseGuards(JwtAuthGuard)
+  @AllowedRoles(UserType.ADMIN, UserType.STAFF)
+  @Get("/statistics")
+  statistics() {
+    return this.menuService.statistics();
+  }
 }
