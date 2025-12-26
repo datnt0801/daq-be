@@ -68,7 +68,7 @@
     "lodash": "^4.17.21",
     "log4js": "^6.9.1",
     "moment": "^2.29.4",
-    "mysql": "^2.18.1",
+    "mysql2": "^3.16.0",
     "nestjs-typeorm-paginate": "^4.1.0",
     "openai": "^5.1.1",
     "passport": "^0.6.0",
